@@ -1,32 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace cf_stackmatters.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly AppSettings _settings;
+
+        public HomeController(IOptions<AppSettings> appSettings)
+        {
+            _settings = appSettings.Value;
+        }
+
         public IActionResult Index()
         {
-            return View();
+            var reversedText = string.Concat(_settings.PreReversedText.Reverse());
+
+            return View(new HomeModel
+            {
+                ReversedText = reversedText
+
+            });
         }
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
+        
         public IActionResult Error()
         {
             return View();
